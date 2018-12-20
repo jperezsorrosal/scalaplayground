@@ -1,4 +1,8 @@
 
+class Wrapper[A](value: A) {
+  def map[B](f: A => B): Wrapper[B] = new Wrapper(f(value))
+  def flatMap[B](f: A => Wrapper[B]): Wrapper[B] = f(value)
+}
 
 object Glue extends App {
 
@@ -16,10 +20,9 @@ object Glue extends App {
   def printResult(t: (Int, String)): Unit = println(s"Result: ${t._1}, debug message: '${t._2}'")
 
   def bind(f: Int => (Int, String), tuple: (Int, String)): (Int, String) = {
-    val res = f(tuple._1)
+    val (result, message) = f(tuple._1)
 
-    (res._1, tuple._2 + '\n' + res._2 )
+    (result, tuple._2 + '\n' + message )
   }
-
 
 }
